@@ -6,8 +6,9 @@ project:
   render:
     - "index.qmd"
     - "guide/"
-  execute:
-    freeze: auto
+
+execute:
+  freeze: auto
 
 website:
   title: "Research Paper Template"
