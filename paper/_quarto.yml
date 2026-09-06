@@ -1,0 +1,40 @@
+project:
+  type: default
+  output-dir: _output
+
+title: "Paper Title"
+subtitle: "A working subtitle"
+author:
+  - name: First Author
+    affiliations:
+      - ref: aff1
+  - name: Second Author
+    affiliations:
+      - ref: aff2
+affiliations:
+  - id: aff1
+    name: Department, University
+  - id: aff2
+    name: Department, University
+date: today
+date-format: "long"
+bibliography: references.bib
+csl: apa.csl
+format:
+  html:
+    toc: true
+    theme: cosmo
+  pdf:
+    documentclass: article
+    geometry:
+      - margin=1in
+    fig-cap-location: bottom
+  docx:
+    toc: true
+execute:
+  freeze: auto
+  echo: false
+  warning: false
+  message: false
+lang: en
+license: "CC BY"

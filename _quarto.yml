@@ -1,0 +1,64 @@
+project:
+  type: website
+  output-dir: _site
+  # The manuscript lives in its own Quarto project (paper/_quarto.yml) so
+  # coauthors render it to PDF/Word independently. Keep it out of the guide site.
+  render:
+    - "index.qmd"
+    - "guide/"
+  execute:
+    freeze: auto
+
+website:
+  title: "Research Paper Template"
+  description: "A cloneable Quarto + R Markdown workspace for papers using survey design, IPTW, latent class analysis, and network analysis."
+  repo-url: https://github.com/connectors-testing-pplx/research-paper-template
+  repo-actions: [source, issue]
+  repo-subdir: ""
+  favicon: "guide/favicon.png"
+  page-navigation: true
+  bread-crumbs: true
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Overview"
+        href: index.qmd
+      - text: "Getting started"
+        menu:
+          - text: "Setup"
+            href: guide/setup.qmd
+          - text: "Repository structure"
+            href: guide/structure.qmd
+          - text: "Start a new paper"
+            href: guide/start-a-paper.qmd
+      - text: "Methods"
+        menu:
+          - text: "Survey design"
+            href: guide/survey-design.qmd
+          - text: "IPTW"
+            href: guide/iptw.qmd
+          - text: "Latent class analysis"
+            href: guide/lca.qmd
+          - text: "Network analysis"
+            href: guide/network.qmd
+      - text: "Reporting"
+        href: guide/reporting.qmd
+      - text: "Repository"
+        href: https://github.com/connectors-testing-pplx/research-paper-template
+  page-footer:
+    left: |
+      Built with [Quarto](https://quarto.org) &nbsp;·&nbsp; CC BY 4.0
+    right: |
+      [Report an issue](https://github.com/connectors-testing-pplx/research-paper-template/issues)
+  reader-mode: true
+
+format:
+  html:
+    theme:
+      light: [cosmo, guide/light.scss]
+      dark: [darkly, guide/dark.scss]
+    toc: true
+    code-copy: true
+    code-overflow: wrap
+    mainfont: "Atkinson Hyperlegible"

@@ -1,0 +1,61 @@
+---
+title: "Survey design"
+---
+
+# Survey design
+
+For complex-survey data, every estimate must respect the sampling design — weights, stratification, and clustering. This module wraps the `survey` / `srvyr` packages so you build the design object once and pass it downstream.
+
+The helper lives in [`R/survey-design.R`](https://github.com/connectors-testing-pplx/research-paper-template/blob/main/R/survey-design.R).
+
+## Build the design object
+
+```r
+source("R/survey-design.R")
+
+design <- make_design(
+  data      = survey_df,
+  ids       = "psu",       # cluster / PSU id
+  strata    = "stratum",   # stratification variable
+  weights   = "wt",        # sampling weights
+  nest      = TRUE         # relabel ids within strata
+)
+```
+
+## Check the weights
+
+```r
+design <- calibrate_design(design, population = list(sex = c(M = 0.49, F = 0.51)))
+summarise_weights(design)   # prints min, median, max, ESS
+```
+
+The effective sample size (ESS) tells you how much information the weights carry; a large gap between ESS and the nominal N signals highly variable weights.
+
+## Carry the design downstream
+
+Once you have a design object, weighted estimates are one-liners:
+
+```r
+library(srvyr)
+design %>%
+  group_by(treatment) %>%
+  summarise(
+    n    = unweighted(n()),
+    mean = survey_mean(outcome, na.rm = TRUE),
+    se   = survey_mean(outcome, na.rm = TRUE, vartype = "se")
+  )
+```
+
+## Where it plugs into the pipeline
+
+`analysis/02-survey-design.R` builds the design object and saves it to `data/processed/design.rds`. Later steps (IPTW, LCA, network) read it back so every estimate stays design-aware.
+
+```r
+design <- make_design(survey_df, ids = "psu", strata = "stratum", weights = "wt")
+saveRDS(design, file.path(processed_dir, "design.rds"))
+```
+
+## Notes
+
+- If your study is not a complex survey (e.g. a convenience sample), set `weights = NULL` and `ids = ~1`; the helpers still work and downstream code is unchanged.
+- The IPTW module combines propensity-score weights with the survey weights multiplicatively — see the [IPTW](iptw.qmd) page.

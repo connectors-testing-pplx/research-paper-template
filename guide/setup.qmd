@@ -1,0 +1,48 @@
+---
+title: "Setup"
+---
+
+# Prerequisites
+
+| Tool | Version | Why |
+|------|---------|-----|
+| [R](https://cran.r-project.org/) | 4.3+ | Runs the analysis pipeline |
+| [Quarto](https://quarto.org/) | 1.4+ | Renders the guide and the manuscript |
+| [Git](https://git-scm.com/) | any | Version control, cloning the template |
+| A LaTeX distribution | any | Only if you render the manuscript to PDF (e.g. `quarto install tool tinytex`) |
+
+## Restore the R library
+
+This template pins package versions with **renv**. After cloning:
+
+```r
+install.packages("renv")
+renv::restore()
+```
+
+`renv::restore()` recreates the project library exactly as recorded in `renv.lock`. Later, when you add packages, run `renv::snapshot()` to update the lockfile.
+
+## Verify Quarto
+
+```bash
+quarto check
+quarto render paper/paper.qmd --to html
+```
+
+If the manuscript renders to HTML, you are ready.
+
+## Package overview
+
+The pipeline draws on a small, well-maintained set of packages:
+
+| Package | Used by |
+|---------|---------|
+| `survey`, `srvyr` | survey design, weighted estimates |
+| `WeightIt`, `cobalt` | IPTW construction, balance diagnostics |
+| `sandwich`, `lmtest` | robust / cluster-robust SEs for effects |
+| `poLCA` | latent class analysis |
+| `igraph`, `ggraph` | network construction & visualization |
+| `gt`, `modelsummary` | reporting tables |
+| `targets` *(optional)* | pipeline orchestration |
+
+All of these are captured in `renv.lock`.

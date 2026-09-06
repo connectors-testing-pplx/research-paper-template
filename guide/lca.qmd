@@ -1,0 +1,58 @@
+---
+title: "Latent class analysis"
+---
+
+# Latent class analysis
+
+LCA identifies unobserved subgroups (latent classes) from a set of categorical indicator variables. This module wraps `poLCA` to fit a sequence of models, compare them by information criteria, and assign each respondent to a class.
+
+The helper lives in [`R/lca.R`](https://github.com/connectors-testing-pplx/research-paper-template/blob/main/R/lca.R).
+
+## 1. Fit models with 1…K classes
+
+```r
+source("R/lca.R")
+
+lca <- fit_lca(
+  data      = analysis_df,
+  indicators = c("item1", "item2", "item3", "item4", "item5"),
+  max_k      = 5,
+  nrep       = 10,        # random starts per model
+  weights    = "wt"       # optional sampling weights
+)
+```
+
+`fit_lca()` fits models with 1 through `max_k` classes and returns a tidy comparison table.
+
+## 2. Choose the number of classes
+
+```r
+tab <- compare_classes(lca)
+print(tab)               # K, AIC, BIC, entropy, % classified
+plot_bic(lca)             # BIC vs K -> outputs/figures/lca-bic.png
+```
+
+A common rule of thumb: prefer the model with the lowest BIC, subject to interpretable classes and entropy above ~0.7.
+
+## 3. Assign classes and profile them
+
+```r
+assigned <- assign_classes(lca)
+profile <- class_profiles(lca)   # item-response probabilities per class
+print(profile)
+plot_profiles(lca)               # -> outputs/figures/lca-profiles.png
+```
+
+`assign_classes()` adds a `class` column to the data; `class_profiles()` gives the conditional probabilities that define each class for the manuscript.
+
+## 4. Use the classes downstream
+
+The assigned classes become a categorical variable for cross-tabs, regression, or network coloring:
+
+```r
+analysis_df$class <- assigned$class
+```
+
+## Where it plugs into the pipeline
+
+`analysis/04-lca.R` writes `lca-classes.parquet` (the data plus class assignments) and `lca-profiles.csv` to `outputs/`, ready to cite in the results section.

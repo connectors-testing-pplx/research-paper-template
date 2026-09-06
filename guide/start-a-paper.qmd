@@ -1,0 +1,61 @@
+---
+title: "Start a new paper"
+---
+
+# Start a new paper
+
+Each paper is a fresh clone of this template. You keep the structure; you swap in your data, variables, and narrative.
+
+## 1. Create the repo from the template
+
+Use the GitHub **"Use this template"** button, or the CLI:
+
+```bash
+gh repo create my-new-paper --template connectors-testing-pplx/research-paper-template --public --clone
+cd my-new-paper
+```
+
+If you cloned instead of templating, just `git remote set-url origin <your-new-repo>`.
+
+## 2. Rename the project
+
+Open `_quarto.yml` and `paper/_quarto.yml` and change `title:` to your paper's working title. Update the `repo-url` in the root `_quarto.yml` to point at your new repo.
+
+## 3. Restore the library and add your data
+
+```r
+renv::restore()
+```
+
+Drop your raw files into `data/raw/`. Keep them untouched — the pipeline writes derivatives to `data/processed/`.
+
+## 4. Edit the config
+
+`analysis/00-config.R` is the single place to define file paths, variable names, and grouping variables. Most papers only edit this file and the manuscript.
+
+## 5. Run the pipeline
+
+```bash
+Rscript analysis/run-all.R
+```
+
+This executes `01-import` → `06-report` in order, writing figures and tables to `outputs/` and a processed dataset to `data/processed/`.
+
+## 6. Write and render the manuscript
+
+Edit `paper/paper.qmd`. Pull in pipeline outputs with `knitr::include_graphics()` and `gt::gt()` chunks. Render:
+
+```bash
+quarto render paper/paper.qmd --to pdf
+quarto render paper/paper.qmd --to docx
+```
+
+## Checklist
+
+- [ ] Repo created from template
+- [ ] `renv::restore()` ran cleanly
+- [ ] Raw data in `data/raw/`
+- [ ] `analysis/00-config.R` updated with variable names
+- [ ] `run-all.R` completes without error
+- [ ] Manuscript renders to PDF and Word
+- [ ] `renv::snapshot()` committed with new packages

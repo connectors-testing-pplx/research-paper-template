@@ -1,0 +1,48 @@
+---
+title: "Reporting"
+---
+
+# The reporting skeleton
+
+`paper/paper.qmd` is a fill-in-the-blanks manuscript with standard sections already laid out. The pipeline drops figures and tables into `outputs/`; the manuscript pulls them in and renders to PDF, Word, or HTML.
+
+The helper lives in [`R/reporting.R`](https://github.com/connectors-testing-pplx/research-paper-template/blob/main/R/reporting.R).
+
+## Manuscript sections
+
+The skeleton provides these sections, each with a short prompt for what belongs there:
+
+1. **Abstract** — 250 words, structured.
+2. **Introduction** — gap, question, contribution.
+3. **Methods** — design, sample, IPTW, LCA, network, ethics.
+4. **Results** — descriptive, balance, treatment effect, classes, network.
+5. **Discussion** — interpretation, limitations, implications.
+6. **References** — from `references.bib` via Quarto's bibliography.
+7. **Appendices** — sensitivity analyses, codebook.
+
+## Pull pipeline outputs into the manuscript
+
+```r
+# A figure
+knitr::include_graphics(file.path(out_dir, "figures", "iptw-balance.png"))
+
+# A table
+gt::gt(read.csv(file.path(out_dir, "tables", "descriptive.csv")))
+```
+
+The `reporting.R` helper provides `results_table()` (a formatted `gt` table from a data frame) and `forest_data()` (a tidy data frame for a forest plot of subgroup effects), so the results section is mostly assembling already-tidy objects.
+
+## Reproducibility checklist
+
+Before submission:
+
+- [ ] `renv.lock` committed and `renv::restore()` runs cleanly on a fresh clone
+- [ ] `analysis/run-all.R` runs end-to-end from a clean `outputs/` directory
+- [ ] All manuscript figures/tables are regenerated, not hand-edited
+- [ ] Seed set in `00-config.R`; results stable across reruns
+- [ ] `CITATION.cff` updated with the DOI once available
+- [ ] Data and code availability statement completed
+
+## Citing this template
+
+Once you publish a paper built from this template, please add it to `CITATION.cff` so others can find and credit the workflow.

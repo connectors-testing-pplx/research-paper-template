@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 240" width="800" height="240">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2a6f9b"/>
+      <stop offset="100%" stop-color="#3aa6a0"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="240" fill="url(#g)"/>
+  <g fill="#ffffff" font-family="Atkinson Hyperlegible, system-ui, sans-serif">
+    <text x="48" y="120" font-size="40" font-weight="700">Research Paper Template</text>
+    <text x="48" y="160" font-size="22" opacity="0.9">Survey design · IPTW · LCA · Network analysis</text>
+  </g>
+</svg>

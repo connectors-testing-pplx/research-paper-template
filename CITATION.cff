@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+title: "Research Paper Template"
+message: "A cloneable Quarto + R Markdown workspace for survey design, IPTW, LCA, and network analysis."
+type: software
+authors:
+  - family-names: "Template"
+    given-names: "Authors"
+repository-code: "https://github.com/connectors-testing-pplx/research-paper-template"
+url: "https://connectors-testing-pplx.github.io/research-paper-template/"
+license: MIT
+preferred-citation:
+  title: "Research Paper Template"
+  type: software
+  year: 2026

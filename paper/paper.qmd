@@ -1,0 +1,102 @@
+---
+title: "Paper Title"
+---
+
+# Abstract
+
+> 250-word structured abstract. Background, methods, results, conclusions.
+
+# Introduction
+
+State the gap, the research question, and the contribution of this paper.
+
+# Methods
+
+## Design and sample
+
+Describe the survey design, sampling frame, and sample size. Reference the design object built in `analysis/02-survey-design.R`.
+
+## Inverse probability of treatment weighting
+
+Describe the propensity model, estimand, and balance diagnostics. See `analysis/03-iptw.R` and the [IPTW guide](../guide/iptw.qmd).
+
+## Latent class analysis
+
+Describe the indicator set, model selection criteria, and the chosen number of classes. See `analysis/04-lca.R` and the [LCA guide](../guide/lca.qmd).
+
+## Network analysis
+
+Describe how the network was constructed, the centrality and community-detection methods. See `analysis/05-network.R` and the [network guide](../guide/network.qmd).
+
+## Ethics and data
+
+IRB statement, consent, and data/code availability.
+
+# Results
+
+## Descriptive
+
+```{r}
+#| label: tbl-descriptive
+#| tbl-cap: "Descriptive characteristics of the sample."
+desc <- read.csv(file.path(here::here(), "outputs", "tables", "descriptive.csv"))
+gt::gt(desc)
+```
+
+## Covariate balance after IPTW
+
+```{r}
+#| label: fig-balance
+#| fig-cap: "Love plot of standardized mean differences before and after weighting."
+knitr::include_graphics(file.path(here::here(), "outputs", "figures", "iptw-balance.png"))
+```
+
+## Treatment effect
+
+```{r}
+#| label: tbl-effect
+#| tbl-cap: "Estimated treatment effect (IPTW)."
+eff <- read.csv(file.path(here::here(), "outputs", "tables", "iptw-effects.csv"))
+gt::gt(eff)
+```
+
+## Latent classes
+
+```{r}
+#| label: fig-lca-bic
+#| fig-cap: "BIC across candidate LCA models."
+knitr::include_graphics(file.path(here::here(), "outputs", "figures", "lca-bic.png"))
+```
+
+```{r}
+#| label: fig-lca-profiles
+#| fig-cap: "Item-response probabilities per latent class."
+knitr::include_graphics(file.path(here::here(), "outputs", "figures", "lca-profiles.png"))
+```
+
+## Network
+
+```{r}
+#| label: fig-network
+#| fig-cap: "Network of co-occurrences, colored by community, sized by degree."
+knitr::include_graphics(file.path(here::here(), "outputs", "figures", "network.png"))
+```
+
+# Discussion
+
+Interpretation, limitations, and implications.
+
+# References
+
+::: {#refs}
+:::
+
+# Appendix {-}
+
+## Sensitivity analyses
+
+Describe any sensitivity analyses (e.g. trimming thresholds, alternative LCA K).
+
+## Codebook
+
+Variable definitions and recodes.

@@ -1,0 +1,67 @@
+---
+title: "IPTW"
+---
+
+# Inverse probability of treatment weighting
+
+IPTW balances treated and untreated groups on observed covariates by weighting each unit by the inverse of its probability of receiving the treatment it actually got. This module wraps `WeightIt` (weight construction) and `cobalt` (balance diagnostics).
+
+The helper lives in [`R/iptw.R`](https://github.com/connectors-testing-pplx/research-paper-template/blob/main/R/iptw.R).
+
+## 1. Estimate propensity scores and weights
+
+```r
+source("R/iptw.R")
+
+iptw <- fit_iptw(
+  data      = analysis_df,
+  treatment = "treated",
+  covariates = c("age", "sex", "educ", "income", "region"),
+  method    = "ps",       # logistic propensity score
+  estimand  = "ATE"      # or "ATT"
+)
+```
+
+`fit_iptw()` returns the fitted weights and the propensity model. For a survey, pass `design = your_design` to weight the propensity model by sampling weights.
+
+## 2. Diagnose balance
+
+```r
+bal <- check_balance(iptw, data = analysis_df, treatment = "treated")
+print(bal)        # standardized mean differences before/after weighting
+plot_balance(bal) # love plot -> outputs/figures/iptw-balance.png
+```
+
+Aim for standardized mean differences below 0.1 across covariates after weighting.
+
+## 3. Trim extreme weights
+
+Heavy tails inflate variance. The helper trims weights at a percentile you choose:
+
+```r
+iptw <- trim_weights(iptw, at = 0.99)
+```
+
+## 4. Estimate the treatment effect
+
+```r
+effect <- estimate_effect(
+  iptw,
+  data    = analysis_df,
+  outcome = "y",
+  family  = gaussian,
+  design  = design,         # survey design for SEs
+  cluster = "psu"
+)
+print(effect)   # weighted mean difference / risk difference with robust SE
+```
+
+The effect estimate uses a weighted outcome model with sandwich (or design-based) standard errors.
+
+## Combined weights
+
+When both sampling weights and IPTW weights apply, the final analysis weight is their product. The helper handles this internally when you pass `design`; downstream scripts simply use the combined weights saved to `data/processed/iptw_weights.parquet`.
+
+## Where it plugs into the pipeline
+
+`analysis/03-iptw.R` runs the four steps above and writes `iptw-balance.png` and `iptw-effects.csv` to `outputs/`.

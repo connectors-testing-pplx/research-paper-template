@@ -1,0 +1,41 @@
+---
+title: "Research Paper Template"
+subtitle: "A cloneable Quarto + R Markdown workspace"
+image: "guide/hero.svg"
+---
+
+# What this is
+
+A single cloneable workspace for applied papers that combine **survey design**, **IPTW**, **latent class analysis**, and **network analysis**, with a fill-in-the-blanks reporting skeleton. Every new paper starts from the same structure, so coauthors spend time on the science, not on re-scaffolding.
+
+## The four method modules
+
+::: {.panel-tabset}
+
+### Survey design
+
+Build a survey design object (weights, strata, PSU), check the weights, and carry the design through every downstream estimate. See [Survey design](guide/survey-design.qmd).
+
+### IPTW
+
+Estimate propensity scores, construct inverse-probability-of-treatment weights, diagnose covariate balance, and estimate treatment effects. See [IPTW](guide/iptw.qmd).
+
+### Latent class analysis
+
+Fit and compare LCA models across class counts, pick the best fit by information criteria, and assign respondents to classes. See [Latent class analysis](guide/lca.qmd).
+
+### Network analysis
+
+Turn an edge list or adjacency matrix into an `igraph` object, compute centrality and communities, and visualize the network. See [Network analysis](guide/network.qmd).
+
+:::
+
+## How to use this template
+
+1. [Set up](guide/setup.qmd) R, Quarto, and the project library.
+2. Understand the [repository structure](guide/structure.qmd).
+3. [Start a new paper](guide/start-a-paper.qmd) from the template.
+4. Run the numbered pipeline in `analysis/`.
+5. Fill in `paper/paper.qmd` and render.
+
+The live guide you are reading is itself generated from this repo. The source lives at [connectors-testing-pplx/research-paper-template](https://github.com/connectors-testing-pplx/research-paper-template).

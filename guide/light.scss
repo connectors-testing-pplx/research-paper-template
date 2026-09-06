@@ -1,0 +1,12 @@
+/* Light theme tweaks for the guide site */
+/*-- scss:rules --*/
+$body-bg: #ffffff;
+$body-color: #1f2933;
+$link-color: #2a6f9b;
+$navbar-bg: #2a6f9b;
+$navbar-color: #ffffff;
+
+/* Slightly tighter typography for a documentation feel */
+p { line-height: 1.65; }
+code { background: #f4f5f7; padding: 0.1em 0.25em; border-radius: 3px; }
+pre { border-radius: 6px; }

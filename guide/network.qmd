@@ -1,0 +1,58 @@
+---
+title: "Network analysis"
+---
+
+# Network analysis
+
+This module turns relational data — an edge list or an adjacency matrix — into an `igraph` object, computes centrality and community structure, and produces publication figures with `ggraph`.
+
+The helper lives in [`R/network-analysis.R`](https://github.com/connectors-testing-pplx/research-paper-template/blob/main/R/network-analysis.R).
+
+## 1. Build the graph
+
+```r
+source("R/network-analysis.R")
+
+net <- make_graph(
+  edges      = edge_df,    # columns: from, to, [weight]
+  directed   = FALSE,
+  node_attrs = node_df    # optional: id, label, class, ...
+)
+```
+
+For a co-occurrence network derived from survey responses, see `build_cooccurrence_network()` which computes a weighted graph from a set of binary items.
+
+## 2. Summarize structure
+
+```r
+metrics <- network_metrics(net)
+print(metrics)   # nodes, edges, density, components, transitivity, mean degree
+```
+
+## 3. Compute centrality and communities
+
+```r
+net <- add_centrality(net, measures = c("degree", "betweenness", "eigen"))
+net <- detect_communities(net, algorithm = "louvain")
+```
+
+Centrality scores and community membership are attached as vertex attributes, so they are available for both plotting and downstream regression.
+
+## 4. Visualize
+
+```r
+plot_network(net, by = "community", size_by = "degree")
+# -> outputs/figures/network.png
+```
+
+## 5. Export node-level data
+
+```r
+node_table <- as_tibble_vertex(net)
+write.csv(node_table, file.path(tables_dir, "network-node-metrics.csv"),
+          row.names = FALSE)
+```
+
+## Where it plugs into the pipeline
+
+`analysis/05-network.R` writes `network.png`, `network-node-metrics.csv`, and `network-communities.parquet` to `outputs/`. If your paper integrates LCA classes with the network, color nodes by `class` via the `node_attrs` argument.
